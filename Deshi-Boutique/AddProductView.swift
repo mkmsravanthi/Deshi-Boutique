@@ -7,73 +7,123 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseStorage
 
 struct AddProductView: View {
 
     @State private var name = ""
     @State private var category = ""
     @State private var price = ""
-    @State private var imageUrl = ""
-    @State private var description = ""
+    @State private var details = ""
+    @State private var image: UIImage?
 
-    @Environment(\.dismiss) var dismiss
-
-    let categories = ["Sarees", "Kids", "Ornaments"]
+    @State private var showPicker = false
+    @State private var isUploading = false
 
     var body: some View {
-        Form {
-            Section(header: Text("Product Details")) {
+        ScrollView {
+            VStack(spacing: 15) {
 
-                TextField("Product Name", text: $name)
-
-                Picker("Category", selection: $category) {
-                    ForEach(categories, id: \.self) {
-                        Text($0)
+                Button {
+                    showPicker = true
+                } label: {
+                    if let image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(height: 180)
+                            .cornerRadius(12)
+                    } else {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke()
+                            .frame(height: 180)
+                            .overlay(Text("Tap to select image"))
                     }
                 }
 
+                TextField("Product Name", text: $name)
+                    .textFieldStyle(.roundedBorder)
+
+                TextField("Category", text: $category)
+                    .textFieldStyle(.roundedBorder)
+
                 TextField("Price", text: $price)
                     .keyboardType(.numberPad)
+                    .textFieldStyle(.roundedBorder)
 
-                TextField("Image URL (public)", text: $imageUrl)
+                TextField("Description", text: $details)
+                    .textFieldStyle(.roundedBorder)
 
-                TextField("Description", text: $description)
+                Button(isUploading ? "Uploading..." : "Upload Product") {
+                    upload()
+                }
+                .disabled(isUploading)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(12)
             }
-
-            Button("Save Product") {
-                saveProduct()
-            }
+            .padding()
         }
         .navigationTitle("Add Product")
+        .sheet(isPresented: $showPicker) {
+            ImagePicker(image: $image)
+        }
     }
 
-    // MARK: - Save Product to Firestore
-    func saveProduct() {
+    func upload() {
+        guard let image,
+              let priceValue = Int(price) else {
+            print("Uploading started")
 
-        guard !name.isEmpty,
-              !price.isEmpty,
-              !imageUrl.isEmpty else {
+            print("Missing data")
+            
+            print("Firestore saved")
+
             return
         }
 
-        let productData: [String: Any] = [
-            "name": name,
-            "category": category,
-            "price": Int(price) ?? 0,
-            "imageUrl": imageUrl,
-            "description": description
-        ]
+        isUploading = true
 
-        Firestore.firestore()
-            .collection("products")
-            .addDocument(data: productData) { error in
-                if error == nil {
-                    dismiss()
-                }
+        let ref = Storage.storage()
+            .reference()
+            .child("products/\(UUID().uuidString).jpg")
+
+        ref.putData(image.jpegData(compressionQuality: 0.8)!) { _, error in
+            if let error = error {
+                print("Upload error:", error)
+                isUploading = false
+                return
             }
+
+            ref.downloadURL { url, _ in
+                guard let url else { return }
+
+                Firestore.firestore()
+                    .collection("products")
+                    .addDocument(data: [
+                        "name": name,
+                        "category": category,
+                        "price": priceValue,
+                        "imageUrl": url.absoluteString,
+                        "description": details
+                    ]) { _ in
+                        isUploading = false
+                        clear()
+                    }
+            }
+        }
+    }
+
+    func clear() {
+        name = ""
+        category = ""
+        price = ""
+        details = ""
+        image = nil
     }
 }
-
 
 #Preview {
     AddProductView()

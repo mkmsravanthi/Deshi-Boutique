@@ -36,7 +36,7 @@ struct RootView: View {
     func observeAuthState() {
         Auth.auth().addStateDidChangeListener { _, user in
             if let user = user {
-                print("AUTH UID:", user.uid)   // 👈 ADD THIS
+                //print("AUTH UID:", user.uid)   // 👈 ADD THIS
                 fetchUserRole(uid: user.uid)
             } else {
                 isLoggedIn = false

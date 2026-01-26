@@ -32,11 +32,11 @@ struct AdminDashboardView: View {
             
         }
     }
-    struct AddProductView: View {
+    /*struct AddProductView: View {
         var body: some View {
             Text("Add Product Screen")
         }
-    }
+    }*/
 
     func logout() {
         try? Auth.auth().signOut()
