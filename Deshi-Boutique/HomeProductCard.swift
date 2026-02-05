@@ -12,6 +12,7 @@ struct HomeProductCard: View {
 
     @EnvironmentObject var cartManager: CartManager
     @EnvironmentObject var favoritesManager: FavoritesManager
+    @State private var selectedSize: Size = .M
 
     var showCartButton: Bool = true
     var showFavoriteButton: Bool = true
@@ -54,12 +55,13 @@ struct HomeProductCard: View {
                 .font(.headline)
                 .lineLimit(1)
 
-            Text("kr\(product.price)")
+            Text("\(product.price, specifier: "%.2f") kr ")
                 .foregroundColor(.gray)
 
             if showCartButton {
                 Button {
-                    cartManager.addToCart(product)
+                    cartManager.add(product: product, size: selectedSize)
+
                 } label: {
                     Text("Add to Cart")
                         .font(.caption)
@@ -69,7 +71,7 @@ struct HomeProductCard: View {
                         .cornerRadius(10)
                 }
                 .onAppear{
-                    print("CartManager:", $cartManager.cartItems.count)
+                    print("CartManager:", cartManager.items.count)
                 }
             }
         }

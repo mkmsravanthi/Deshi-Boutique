@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ProductDetailView: View {
 
-    let product: Product   // Product passed from home screen
+    let product: Product
     
     @EnvironmentObject var cartManager: CartManager
     @EnvironmentObject var favoritesManager: FavoritesManager
 
-    
+    @State private var selectedSize: Size = .M
+
     var body: some View {
-        
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
 
@@ -38,10 +38,31 @@ struct ProductDetailView: View {
                     .padding(.horizontal)
 
                 // 💰 Price
-                Text("kr\(product.price)")
+                Text("kr \(product.price, specifier: "%.2f")")
                     .font(.title2)
                     .foregroundColor(.green)
                     .padding(.horizontal)
+
+                // 📏 Size Selection
+                Text("Select Size")
+                    .font(.headline)
+                    .padding(.horizontal)
+
+                SizePicker(selectedSize: $selectedSize)
+                    .padding(.horizontal)
+
+                // 🛒 Add to Cart
+                Button {
+                    cartManager.add(product: product, size: selectedSize)
+                } label: {
+                    Text("Add to Cart")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                }
 
                 // 📝 Description
                 Text("Product Description")
@@ -59,6 +80,8 @@ struct ProductDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+
 extension Product {
     static let mock = Product(
         id: "1",
@@ -74,6 +97,7 @@ extension Product {
 #Preview {
     NavigationStack {
         ProductDetailView(product: .mock)
+        
     }
     .environmentObject(CartManager())
     .environmentObject(FavoritesManager())

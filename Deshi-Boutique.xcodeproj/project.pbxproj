@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8233B5862F2A3A8B00680BC5 /* server.js in Resources */ = {isa = PBXBuildFile; fileRef = 8233B5852F2A3A8B00680BC5 /* server.js */; };
 		823674712F1A836700749DDD /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 823674702F1A836700749DDD /* FirebaseAuth */; };
 		823674732F1A836700749DDD /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 823674722F1A836700749DDD /* FirebaseFirestore */; };
 		823674752F1A836700749DDD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 823674742F1A836700749DDD /* FirebaseStorage */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8233B5852F2A3A8B00680BC5 /* server.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = server.js; sourceTree = "<group>"; };
 		823674432F1A7A5400749DDD /* Deshi-Boutique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Deshi-Boutique.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		823674502F1A7A5500749DDD /* Deshi-BoutiqueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Deshi-BoutiqueTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8236745A2F1A7A5500749DDD /* Deshi-BoutiqueUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Deshi-BoutiqueUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +86,7 @@
 		8236743A2F1A7A5400749DDD = {
 			isa = PBXGroup;
 			children = (
+				8233B5852F2A3A8B00680BC5 /* server.js */,
 				823674452F1A7A5400749DDD /* Deshi-Boutique */,
 				823674532F1A7A5500749DDD /* Deshi-BoutiqueTests */,
 				8236745D2F1A7A5500749DDD /* Deshi-BoutiqueUITests */,
@@ -227,6 +230,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8233B5862F2A3A8B00680BC5 /* server.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

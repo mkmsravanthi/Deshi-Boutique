@@ -9,24 +9,18 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
 
-struct Product: Identifiable {
-    let id: String
-    let name: String
-    let category: String
-    let price: Int
-    let imageUrl: String
-    let details: String
-}
 
 struct ContentView: View {
 
     @State private var products: [Product] = []
     @State private var searchText = ""
-
+  
+    
     let categories = ["Sarees", "Kids", "Ornaments"]
 
     var body: some View {
         NavigationStack {
+            
             ZStack {
                 // 🔵 Background
                 LinearGradient(
@@ -162,7 +156,7 @@ struct ContentView: View {
                             id: doc.documentID,
                             name: data["name"] as? String ?? "",
                             category: data["category"] as? String ?? "",
-                            price: data["price"] as? Int ?? 0,
+                            price: Double(data["price"] as? Int ?? 0),
                             imageUrl: data["imageUrl"] as? String ?? "",
                             details: data["description"] as? String ?? ""
                         )

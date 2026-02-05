@@ -8,11 +8,61 @@
 import SwiftUI
 
 class CartManager: ObservableObject {
-    @Published var cartItems: [Product] = []
+    @Published var items: [CartItem] = []
+    
+    
 
-    func addToCart(_ product: Product) {
-        if !cartItems.contains(where: { $0.id == product.id }) {
-            cartItems.append(product)
+    func add(product: Product, size: Size) {
+        if let index = items.firstIndex(where: {
+            $0.product.id == product.id && $0.size == size
+        }) {
+            items[index].quantity += 1
+        } else {
+            items.append(CartItem(product: product, size: size, quantity: 1))
+        }
+    }
+
+    func update(item: CartItem, newSize: Size? = nil, newQuantity: Int? = nil) {
+        guard let index = items.firstIndex(where: { $0.id == item.id }) else { return }
+        if let newSize = newSize { items[index].size = newSize }
+        if let newQuantity = newQuantity { items[index].quantity = newQuantity }
+    }
+
+    func remove(item: CartItem) {
+        items.removeAll { $0.id == item.id }
+    }
+
+    var totalPrice: Double {
+        items.reduce(0.0) { $0 + $1.product.price * Double($1.quantity) }
+    }
+
+}
+
+enum Size: String, CaseIterable {
+    case S, M, L
+}
+
+struct CartItem: Identifiable {
+    let id = UUID()
+    let product: Product
+    var size: Size
+    var quantity: Int
+}
+
+struct SizePicker: View {
+    @Binding var selectedSize: Size
+
+    var body: some View {
+        HStack {
+            ForEach(Size.allCases, id: \.self) { size in
+                Button(size.rawValue) {
+                    selectedSize = size
+                }
+                .padding()
+                .background(selectedSize == size ? Color.black : Color.gray.opacity(0.3))
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
         }
     }
 }

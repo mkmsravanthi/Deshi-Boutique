@@ -56,9 +56,9 @@ struct ManageProductsView: View {
                         id: doc.documentID,
                         name: data["name"] as? String ?? "",
                         category: data["category"] as? String ?? "",
-                        price: data["price"] as? Int ?? 0,
+                        price: Double(data["price"] as? Int ?? 0),
                         imageUrl: data["imageUrl"] as? String ?? "",
-                        details: data["description"] as? String ?? "" // ✅ FIX
+                        details: data["description"] as? String ?? "" 
                     )
                 }
             }

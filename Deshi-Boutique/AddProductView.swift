@@ -5,7 +5,126 @@
 //  Created by K M Sravanthi Mangipudi on 2026-01-20.
 //
 
+
 import SwiftUI
+import PhotosUI
+
+struct AddProductView: View {
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImage: UIImage? = nil
+    @State private var statusMessage = ""
+    
+    let backendURL = "http://192.168.68.61:3000/upload" // Replace with your server URL
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            if let image = selectedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 300)
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 300)
+                    .overlay(Text("No Image Selected"))
+            }
+            
+            PhotosPicker("Select Image", selection: $selectedItem, matching: .images)
+                .onChange(of: selectedItem) { newItem in
+                    if let item = newItem {
+                        loadImage(item: item)
+                    }
+                }
+            
+            Button("Upload to GitHub") {
+                if let image = selectedImage {
+                    uploadToBackend(image: image)
+                }
+            }
+            .disabled(selectedImage == nil)
+            
+            Text(statusMessage)
+                .foregroundColor(.blue)
+                .padding()
+        }
+        .padding()
+    }
+    
+    func loadImage(item: PhotosPickerItem) {
+        item.loadTransferable(type: Data.self) { result in
+            switch result {
+            case .success(let data?):
+                DispatchQueue.main.async {
+                    self.selectedImage = UIImage(data: data)
+                }
+            case .success(nil):
+                print("No data found")
+            case .failure(let error):
+                print("Error loading image: \(error)")
+            }
+        }
+    }
+    
+    func uploadToBackend(image: UIImage) {
+        
+        guard let url = URL(string: backendURL) else {
+            print("❌ Invalid backend URL")
+            return
+        }
+        
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            print("❌ Could not convert image")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        print("url:", url)
+        request.httpMethod = "POST"
+        
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        var body = Data()
+        
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body
+        
+        statusMessage = "Uploading..."
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            DispatchQueue.main.async {
+                
+                if let error = error {
+                    statusMessage = "❌ \(error.localizedDescription)"
+                    return
+                }
+                
+                guard let data = data else {
+                    statusMessage = "❌ No response from server"
+                    return
+                }
+                
+                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let url = json["url"] as? String {
+                    statusMessage = "✅ Uploaded!"
+                    
+                } else {
+                    statusMessage = "❌ Upload failed"
+                    print(String(data: data, encoding: .utf8) ?? "")
+                }
+            }
+        }.resume()
+    }
+}
+
+
+/*import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
 
@@ -128,3 +247,4 @@ struct AddProductView: View {
 #Preview {
     AddProductView()
 }
+*/

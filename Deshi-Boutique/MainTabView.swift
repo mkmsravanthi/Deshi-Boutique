@@ -8,29 +8,36 @@
 import SwiftUI
 
 struct MainTabView: View {
+    
+    @StateObject var cartManager = CartManager()
+
 
     var body: some View {
-        TabView {
+        NavigationStack {
+            TabView {
+                
+                ContentView()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                
+                WhishlistView()
+                    .tabItem {
+                        Label("Wishlist", systemImage: "heart")
+                    }
+                
+                CartView()
+                    .tabItem {
+                        Label("Cart", systemImage: "cart")
+                    }
+                
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "person")
+                    }
+            }
+            .environmentObject(cartManager)
 
-            ContentView()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-
-            WhishlistView()
-                .tabItem {
-                    Label("Wishlist", systemImage: "heart")
-                }
-
-            CartView()
-                .tabItem {
-                    Label("Cart", systemImage: "cart")
-                }
-
-            ProfileView()
-                .tabItem {
-                    Label("Profile", systemImage: "person")
-                }
         }
     }
 }
