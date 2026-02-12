@@ -52,7 +52,7 @@ struct ProductDetailView: View {
                     .padding(.horizontal)
 
                 // 🛒 Add to Cart
-                Button {
+               /* Button {
                     cartManager.add(product: product, size: selectedSize)
                 } label: {
                     Text("Add to Cart")
@@ -62,7 +62,11 @@ struct ProductDetailView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.horizontal)
+                }*/
+                NavigationLink(destination: ProductDetailView(product: product)) {
+                    ProductRow(product: product)
                 }
+
 
                 // 📝 Description
                 Text("Product Description")
@@ -82,6 +86,7 @@ struct ProductDetailView: View {
 }
 
 
+
 extension Product {
     static let mock = Product(
         id: "1",
@@ -92,15 +97,44 @@ extension Product {
         details: "Beautiful handwoven saree made with pure cotton."
     )
 }
+struct ProductRow: View {
+    let product: Product
+    
+    var body: some View {
+        HStack {
+            AsyncImage(url: URL(string: product.imageUrl)) { image in
+                image.resizable().scaledToFill()
+            } placeholder: {
+                Color.gray
+            }
+            .frame(width: 60, height: 60)
+            .clipped()
+            
+            VStack(alignment: .leading) {
+                Text(product.name)
+                    .font(.headline)
+                Text("kr \(product.price, specifier: "%.2f")")
+                    .font(.subheadline)
+                    .foregroundColor(.green)
+            }
+            Spacer()
+        }
+        .padding(.horizontal)
+    }
+}
+
 
 
 #Preview {
+    let cartManager = CartManager()
+    let favoritesManager = FavoritesManager()
+
     NavigationStack {
         ProductDetailView(product: .mock)
-        
+            .environmentObject(cartManager)
+            .environmentObject(favoritesManager)
     }
-    .environmentObject(CartManager())
-    .environmentObject(FavoritesManager())
 }
+
 
 

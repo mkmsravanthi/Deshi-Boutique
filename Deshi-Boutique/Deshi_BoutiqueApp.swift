@@ -23,7 +23,7 @@ struct Deshi_BoutiqueApp: App {
        }*/
     var body: some Scene {
         WindowGroup {
-                    RootView()
+            RootView()
                         .environmentObject(cartManager)
                         .environmentObject(favoritesManager)
                 }
