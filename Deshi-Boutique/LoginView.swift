@@ -17,7 +17,8 @@ struct LoginView: View {
     @State private var loginError = ""
     @State private var errorMessage = ""
     @State private var isLoggedIn = false// 🔹 Optional error display
-    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -69,6 +70,7 @@ struct LoginView: View {
                     }
                     .padding(.horizontal)
                     
+                    
                     // Show login error if any
                     if !loginError.isEmpty {
                         Text(loginError)
@@ -111,6 +113,7 @@ struct LoginView: View {
                 return
             } else {
                 isLoggedIn = true
+                dismiss()
             }
         }
     }

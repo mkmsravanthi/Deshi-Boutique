@@ -15,6 +15,8 @@ struct ProfileView: View {
     @State private var name = ""
     @State private var email = ""
     @State private var showDeleteAlert = false
+    @Environment(\.dismiss) private var dismiss
+
     
     var body: some View {
         NavigationStack {
