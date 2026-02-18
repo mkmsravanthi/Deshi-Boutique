@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     
-    @StateObject var cartManager = CartManager()
+    //@StateObject var cartManager = CartManager()
 
 
     var body: some View {
@@ -36,7 +36,7 @@ struct MainTabView: View {
                         Label("Profile", systemImage: "person")
                     }
             }
-            .environmentObject(cartManager)
+            //.environmentObject(cartManager)
 
         }
     }

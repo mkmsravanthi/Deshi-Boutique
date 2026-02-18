@@ -241,3 +241,92 @@ struct LoginView: View {
     }
 }
 */
+/* code for cancel button for login in cartview
+ var body: some View {
+     NavigationStack {
+         ZStack {
+             AppBackground()
+
+             VStack(spacing: 30) {
+
+                 Spacer()
+
+                 // 🌸 Welcome Text
+                 Text("Welcome")
+                     .font(.largeTitle)
+                     .fontWeight(.bold)
+                     .foregroundColor(.yellow)
+
+                 // 🖼 Logo
+                 Image("desh_logo")
+                     .resizable()
+                     .scaledToFit()
+                     .frame(width: 210)
+
+                 Spacer()
+
+                 // 📧 Email
+                 TextField("Email", text: $email)
+                     .padding()
+                     .background(Color.white.opacity(0.9))
+                     .cornerRadius(10)
+                     .autocapitalization(.none)
+
+                 // 🔒 Password
+                 SecureField("Password", text: $password)
+                     .padding()
+                     .background(Color.white.opacity(0.9))
+                     .cornerRadius(10)
+
+                 // ❌ Error message
+                 if !loginError.isEmpty {
+                     Text(loginError)
+                         .foregroundColor(.red)
+                         .multilineTextAlignment(.center)
+                 }
+
+                 // 🔐 Login Button
+                 Button {
+                     loginUser()
+                 } label: {
+                     Text("Login")
+                         .font(.headline)
+                         .frame(maxWidth: .infinity)
+                         .padding()
+                         .background(Color.yellow)
+                         .foregroundColor(.black)
+                         .cornerRadius(30)
+                 }
+                 .padding(.horizontal)
+
+                 Text("OR")
+                     .foregroundColor(.white)
+
+                 // 📝 Register Button
+                 NavigationLink(destination: RegisterView()) {
+                     Text("Register Now")
+                         .font(.headline)
+                         .frame(maxWidth: .infinity)
+                         .padding()
+                         .background(Color.yellow)
+                         .foregroundColor(.black)
+                         .cornerRadius(30)
+                 }
+                 .padding(.horizontal)
+
+                 Spacer()
+             }
+             .padding()
+         }
+         .navigationTitle("Login")
+         .toolbar {
+             ToolbarItem(placement: .navigationBarLeading) {
+                 Button("Cancel") {
+                     dismiss()
+                 }
+             }
+         }
+     }
+ }
+
+ */

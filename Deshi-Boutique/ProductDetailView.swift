@@ -52,7 +52,7 @@ struct ProductDetailView: View {
                     .padding(.horizontal)
 
                 // 🛒 Add to Cart
-               /* Button {
+                Button {
                     cartManager.add(product: product, size: selectedSize)
                 } label: {
                     Text("Add to Cart")
@@ -62,7 +62,7 @@ struct ProductDetailView: View {
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .padding(.horizontal)
-                }*/
+                }
                 NavigationLink(destination: ProductDetailView(product: product)) {
                     ProductRow(product: product)
                 }
