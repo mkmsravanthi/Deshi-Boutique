@@ -19,7 +19,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 // 🔽 PUT YOUR GITHUB INFO HERE
 const GITHUB_USERNAME = "mkmsravanthi";
 const GITHUB_REPO = "desh-i-boutique";
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN =;
 
 app.post('/upload', upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
